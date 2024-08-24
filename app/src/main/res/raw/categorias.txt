@@ -1,0 +1,6 @@
+Salario,INGRESO
+Premios,INGRESO
+Ventas,INGRESO
+Comida,GASTO
+Compras,GASTO
+Ropa,GASTO

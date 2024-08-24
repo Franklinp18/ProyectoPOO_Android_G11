@@ -8,21 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import modelo.Categoria;
-
 import java.util.ArrayList;
+
+import modelo.Categoria;
 
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ViewHolder> {
 
     private ArrayList<Categoria> listaCategorias;
     private OnItemClickListener listener;
 
-    public CategoriaAdapter(ArrayList<Categoria> listaCategorias) {
+    public CategoriaAdapter(ArrayList<Categoria> listaCategorias, OnItemClickListener onItemClickListener) {
         this.listaCategorias = listaCategorias;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        this.listener = onItemClickListener; // Asignamos el listener desde el constructor
     }
 
     @NonNull
@@ -35,7 +32,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Categoria categoria = listaCategorias.get(position);
-        holder.textViewCategoria.setText(categoria.toString());
+        holder.textViewCategoria.setText(categoria.toString());  // O un campo más específico de Categoria como nombre
     }
 
     @Override
@@ -51,20 +48,20 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
             super(itemView);
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
 
+            // Configuramos el click en el ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(position);  // Pasamos la posición del clic al listener
                     }
                 }
             });
         }
     }
 
+    // Interfaz para manejar el clic en los elementos
     public interface OnItemClickListener {
         void onItemClick(int position);
     }

@@ -6,4 +6,8 @@
     <color name="capital_one_blue">#002A5C</color>
     <color name="capital_one_red">#D03027</color>
     <color name="white">#FFFFFF</color>
+    <!-- Colores personalizados -->
+    <color name="background_color">#F0F0F0</color>
+    <color name="text_primary">#333333</color>
+    <color name="button_color">#2196F3</color>
 </resources>

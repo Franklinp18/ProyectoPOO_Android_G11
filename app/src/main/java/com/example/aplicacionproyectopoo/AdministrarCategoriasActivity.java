@@ -1,106 +1,90 @@
 package com.example.aplicacionproyectopoo;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import modelo.*;
-import modelo.enums.TipoCategoria;
 
-import com.example.aplicacionproyectopoo.CategoriaAdapter;
-
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import modelo.Categoria;
+import modelo.enums.TipoCategoria;
 
 public class AdministrarCategoriasActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerViewCategorias;
-    private CategoriaAdapter categoriaAdapter;
-    private ArrayList<Categoria> listaCategorias;
-    private Button btnAgregarCategoria, btnEliminarCategoria;
-    private int selectedPosition = -1;
+    public static ArrayList<Categoria> listaCategorias; // Lista general de categorías (tanto gastos como ingresos)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrar_categorias);
 
-        // Inicializar vistas
-        recyclerViewCategorias = findViewById(R.id.recyclerViewCategorias);
-        btnAgregarCategoria = findViewById(R.id.btnAgregarCategoria);
-        btnEliminarCategoria = findViewById(R.id.btnEliminarCategoria);
+        Button btnGastos = findViewById(R.id.btnGastos);
+        Button btnIngresos = findViewById(R.id.btnIngresos);
 
-        // Inicializar la lista de categorías
-        listaCategorias = new ArrayList<>();
-        listaCategorias.add(new Categoria("Salario", TipoCategoria.INGRESO));
-        listaCategorias.add(new Categoria("Alquiler", TipoCategoria.GASTO));
-        listaCategorias.add(new Categoria("Comida", TipoCategoria.GASTO));
+        // Leer el archivo txt y cargar los datos en la lista general
+        listaCategorias = leerCategoriasDesdeArchivo();
 
-        // Configurar el RecyclerView y el adaptador
-        categoriaAdapter = new CategoriaAdapter(listaCategorias);
-        recyclerViewCategorias.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewCategorias.setAdapter(categoriaAdapter);
-
-        // Configurar el clic en los ítems del RecyclerView
-        categoriaAdapter.setOnItemClickListener(new CategoriaAdapter.OnItemClickListener() {
+        // Navegar a la pantalla de Gastos
+        btnGastos.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(int position) {
-                selectedPosition = position;
+            public void onClick(View v) {
+                Intent intent = new Intent(AdministrarCategoriasActivity.this, GastosActivity.class);
+                startActivity(intent);
             }
         });
 
-        // Botón para agregar una nueva categoría
-        btnAgregarCategoria.setOnClickListener(new View.OnClickListener() {
+        // Navegar a la pantalla de Ingresos
+        btnIngresos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddCategoryDialog();
-            }
-        });
-
-        // Botón para eliminar la categoría seleccionada
-        btnEliminarCategoria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedPosition != -1) {
-                    listaCategorias.remove(selectedPosition);
-                    categoriaAdapter.notifyItemRemoved(selectedPosition);
-                    selectedPosition = -1;
-                }
+                Intent intent = new Intent(AdministrarCategoriasActivity.this, IngresosActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    // Mostrar diálogo para agregar una nueva categoría
-    private void showAddCategoryDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Agregar Categoría");
+    // Método para leer el archivo txt
+    private ArrayList<Categoria> leerCategoriasDesdeArchivo() {
+        ArrayList<Categoria> categorias = new ArrayList<>(); // Inicializamos la lista
 
-        final EditText input = new EditText(this);
-        builder.setView(input);
+        try {
+            FileInputStream fis = openFileInput("categorias.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 
-        builder.setPositiveButton("Agregar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String nombreCategoria = input.getText().toString();
-                // Puedes decidir si es INCOME o EXPENSE aquí
-                Categoria nuevaCategoria = new Categoria(nombreCategoria, TipoCategoria.GASTO);
-                listaCategorias.add(nuevaCategoria);
-                categoriaAdapter.notifyItemInserted(listaCategorias.size() - 1);
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                // Verificamos si la línea está bien formada
+                String[] partes = linea.split(",");
+                if (partes.length == 2) {
+                    String nombre = partes[0];
+                    try {
+                        TipoCategoria tipo = TipoCategoria.valueOf(partes[1].toUpperCase());
+                        categorias.add(new Categoria(nombre, tipo));
+                    } catch (IllegalArgumentException e) {
+                        // Manejo de error si el tipo de categoría no es válido
+                        e.printStackTrace();
+                    }
+                } else {
+                    // Línea malformada, saltar o loggear el error
+                    System.err.println("Línea malformada: " + linea);
+                }
             }
-        });
+            reader.close();
+        } catch (FileNotFoundException e) {
+            // Manejo si el archivo no existe (primera ejecución)
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+        return categorias;
     }
 }

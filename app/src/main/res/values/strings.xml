@@ -47,4 +47,17 @@
     <string name="administrar_categor_as">Administrar Categorías</string>
     <string name="agregar_categor_a">Agregar Categoría</string>
     <string name="eliminar_categor_a">Eliminar Categoría</string>
+    <string name="administrar_gastos">Administrar Gastos</string>
+    <string name="administrar_ingresos">Administrar Ingresos</string>
+    <string name="agregar_gasto">Agregar Gasto</string>
+    <string name="listado_de_gastos">Listado de Gastos</string>
+    <string name="eliminar_gasto">Eliminar Gasto</string>
+    <string name="nombre_del_gasto">Nombre del Gasto</string>
+
+
+
+    <string name="ingrese_el_nombre_del_ingreso">Ingrese el nombre del ingreso</string>
+    <string name="agregar_ingreso">Agregar Ingreso</string>
+    <string name="eliminar_ingreso">Eliminar Ingreso</string>
+    <string name="listado_de_ingresos">Lista de Ingresos</string>
 </resources>

@@ -23,7 +23,7 @@ public class Categoria {
         @NonNull
         @Override
         public String toString() {
-            return nombre + " (" + tipoCategoria + ")";
+            return nombre;
         }
     }
 
