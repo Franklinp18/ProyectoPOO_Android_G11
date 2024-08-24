@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+
+    <!-- Colores del tema inspirados en Capital One -->
+    <color name="capital_one_blue">#002A5C</color>
+    <color name="capital_one_red">#D03027</color>
+    <color name="white">#FFFFFF</color>
+</resources>

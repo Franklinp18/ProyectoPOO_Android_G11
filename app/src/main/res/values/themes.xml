@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AplicacionProyectoPOO" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Color primario -->
+        <item name="colorPrimary">@color/capital_one_blue</item>
+        <!-- Color primario oscuro -->
+        <item name="colorPrimaryDark">@color/capital_one_blue</item>
+        <!-- Color de acento -->
+        <item name="colorAccent">@color/capital_one_red</item>
+    </style>
+
+    <style name="Theme.AplicacionProyectoPOO" parent="Base.Theme.AplicacionProyectoPOO" />
+
+
+
+</resources>
